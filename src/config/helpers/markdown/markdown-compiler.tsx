@@ -37,7 +37,7 @@ const regexMarkdownIdentifierElements = {
 	ul: /^\s(-|\*){1}\s(.+)$/,
 	table: /\s(\|.+)+\|/,
 	// code: /\s/,
-	br: /^\s?\n$/,
+	br: /^$/,
 }
 
 const CUSTOMIZED_MARKDOWN_KEY = 'markdown-compiler-custom-key'
@@ -48,7 +48,7 @@ const createMarkdownElementKey = (index: number, value: MarkdownElement['value']
 const findElementWithRegexBase = (markdownLinesArray: Array<string>) => {
 	const regexArray = Object.entries(regexMarkdownIdentifierElements)
 	const elementsArray: Array<MarkdownElement> = []
-
+	
 	markdownLinesArray.forEach(markdownLine=>{
 		regexArray.forEach(([key, regex])=>{
 			if(regex.test(markdownLine)){ 
@@ -138,7 +138,6 @@ const getElements = (elementsArray: Array<MarkdownElement>): Array<MarkdownEleme
 				</table>
 			)
 		}
-		console.log(name)
 		switch(name){
 		case 'h1':
 			return <h1>{value}</h1>
