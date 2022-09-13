@@ -1,5 +1,4 @@
 import { ReactElement} from 'react'
-import { DataGrid } from '@mui/x-data-grid'
 
 interface PairElement {
 	name: 'ul' | 'table'
@@ -28,14 +27,14 @@ export type MarkdownElement = {
 }
 
 const regexMarkdownIdentifierElements = {
-	h1: /^\s#\s(.+)$/,
-	h2: /^\s##\s(.+)$/,
-	h3: /^\s###\s(.+)$/,
-	h4: /^\s####\s(.+)$/,
-	h5: /^\s#####\s(.+)$/,
-	h6: /^\s######\s(.+)$/,
+	h1: /^\s(#)\s(.+)$/,
+	h2: /^\s(##)\s(.+)$/,
+	h3: /^\s(###)\s(.+)$/,
+	h4: /^\s(####)\s(.+)$/,
+	h5: /^\s(#####)\s(.+)$/,
+	h6: /^\s(######)\s(.+)$/,
 	hr: /^\s---/,
-	ul: /^\s-|\*\s(.+)$/,
+	ul: /^\s(-|\*){1}\s(.+)$/,
 	table: /\s(\|.+)+\|/,
 	// code: /\s/,
 	br: /^\s?\n$/,
@@ -46,7 +45,6 @@ const createMarkdownElementKey = (index: number, value: MarkdownElement['value']
 	return String(CUSTOMIZED_MARKDOWN_KEY+value+String(name)+new Date(index).toString())
 }
 
-
 const findElementWithRegexBase = (markdownLinesArray: Array<string>) => {
 	const regexArray = Object.entries(regexMarkdownIdentifierElements)
 	const elementsArray: Array<MarkdownElement> = []
@@ -56,7 +54,7 @@ const findElementWithRegexBase = (markdownLinesArray: Array<string>) => {
 			if(regex.test(markdownLine)){ 
 				elementsArray.push({
 					name: key as MarkdownElement['name'],
-					value: markdownLine.replace(regex, '$1'),
+					value: markdownLine.replace(regex, '$2'),
 				})
 			}
 		})
@@ -140,6 +138,7 @@ const getElements = (elementsArray: Array<MarkdownElement>): Array<MarkdownEleme
 				</table>
 			)
 		}
+		console.log(name)
 		switch(name){
 		case 'h1':
 			return <h1>{value}</h1>
