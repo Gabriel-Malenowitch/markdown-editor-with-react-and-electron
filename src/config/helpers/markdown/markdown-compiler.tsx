@@ -34,10 +34,9 @@ const regexMarkdownIdentifierElements = {
 	h5: /^\s(#####)\s(.+)$/,
 	h6: /^\s(######)\s(.+)$/,
 	hr: /^\s---/,
+	br: /^$/,
 	ul: /^\s(-|\*){1}\s(.+)$/,
 	table: /\s(\|.+)+\|/,
-	// code: /\s/,
-	br: /^$/,
 	p: /^((.*))$/
 }
 
@@ -52,7 +51,7 @@ const findElementWithRegexBase = (markdownLinesArray: Array<string>) => {
 	
 	markdownLinesArray.forEach(markdownLine=>{
 		regexArray.forEach(([key, regex])=>{
-			if(regex.test(markdownLine)){ 
+			if(regex.test(markdownLine)){
 				elementsArray.push({
 					name: key as MarkdownElement['name'],
 					value: markdownLine.replace(regex, '$2'),
@@ -65,6 +64,7 @@ const findElementWithRegexBase = (markdownLinesArray: Array<string>) => {
 }
 
 const getElements = (elementsArray: Array<MarkdownElement>): Array<MarkdownElement> => {
+	const isCompiling = false
 	const createTransformElement = ({ name, value }: MarkdownElement, index: number): ReactElement => {
 		const createTransformUlElement = () => {
 			const sanitizedBeforeIndex = elementsArray[index-1]?.name !== name ? index - 1 : false
@@ -152,14 +152,15 @@ const getElements = (elementsArray: Array<MarkdownElement>): Array<MarkdownEleme
 			return <h5>{value}</h5>
 		case 'h6':
 			return <h6>{value}</h6>
-		case 'br':
-			return <br/>
-		case 'hr':
-			return <hr/>
+		case isCompiling ? ('p' || 'br') : false:
 		case 'ul':
 			return createTransformUlElement()
 		case 'table':
 			return createTransformTableElement()
+		case 'br':
+			return <br/>
+		case 'hr':
+			return <hr/>
 		}
 
 		return <p>{value}</p>
