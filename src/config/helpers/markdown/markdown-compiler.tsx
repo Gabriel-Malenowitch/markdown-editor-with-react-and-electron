@@ -38,6 +38,7 @@ const regexMarkdownIdentifierElements = {
 	table: /\s(\|.+)+\|/,
 	// code: /\s/,
 	br: /^$/,
+	p: /^((.*))$/
 }
 
 const CUSTOMIZED_MARKDOWN_KEY = 'markdown-compiler-custom-key'
